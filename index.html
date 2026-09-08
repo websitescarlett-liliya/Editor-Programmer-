@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherMotion - Ultimate Web & Video Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lottie Player -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Vanilla Tilt JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+</head>
+<body class="dark-theme">
+
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+
+    <!-- Command Palette Modal -->
+    <div class="command-palette-overlay" id="commandPalette">
+        <div class="command-palette glass-card">
+            <div class="palette-header">
+                <i class="fa-solid fa-terminal"></i>
+                <input type="text" id="paletteInput" placeholder="Ketik perintah atau cari fitur... (ctrl + k)">
+            </div>
+            <ul class="palette-results" id="paletteResults">
+                <li data-action="toggle-mode"><i class="fa-solid fa-moon"></i> Ganti Theme (Dark/Light)</li>
+                <li data-action="run-code"><i class="fa-solid fa-play"></i> Jalankan Kode Web</li>
+                <li data-action="import-font"><i class="fa-solid fa-font"></i> Import Font Kustom</li>
+                <li data-action="export-video"><i class="fa-solid fa-file-video"></i> Export Proyek Motion</li>
+                <li data-action="confetti"><i class="fa-solid fa-party-popper"></i> Rayakan (Confetti Effect)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Top Floating Navbar -->
+    <nav class="navbar glass-card">
+        <div class="nav-brand">
+            <i class="fa-solid fa-wand-magic-sparkles brand-icon"></i>
+            <span class="scramble-text" data-value="AETHER STUDIO">AETHER STUDIO</span>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active magnetic-btn" data-tab="code-editor"><i class="fa-solid fa-code"></i> Code Studio</button>
+            <button class="tab-btn magnetic-btn" data-tab="motion-editor"><i class="fa-solid fa-film"></i> Motion Studio</button>
+        </div>
+
+        <div class="nav-actions">
+            <!-- Custom Font Import Button -->
+            <label for="fontUpload" class="btn-icon magnetic-btn" title="Import Custom Font">
+                <i class="fa-solid fa-file-import"></i>
+            </label>
+            <input type="file" id="fontUpload" accept=".ttf, .otf, .woff, .woff2" hidden>
+
+            <!-- Command Palette Toggle -->
+            <button class="btn-icon magnetic-btn" id="cmdPaletteBtn" title="Command Palette (Ctrl+K)">
+                <i class="fa-solid fa-terminal"></i>
+            </button>
+
+            <!-- Dark / Light Mode Toggle -->
+            <button class="btn-icon magnetic-btn" id="themeToggle" title="Toggle Theme">
+                <i class="fa-solid fa-sun"></i>
+            </button>
+
+            <!-- Morphing Run/Action Button -->
+            <button class="btn-morph ripple-btn" id="mainActionBtn">
+                <span class="btn-text"><i class="fa-solid fa-play"></i> Run Project</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+
+        <!-- SECTION 1: CODEPEN-LIKE EDITOR -->
+        <section id="code-editor" class="editor-section active">
+            <div class="code-panels">
+                <!-- HTML Panel -->
+                <div class="panel glass-card tilt-card" data-tilt data-tilt-max="3" data-tilt-glare data-tilt-max-glare="0.1">
+                    <div class="panel-header">
+                        <span><i class="fa-brands fa-html5 color-html"></i> HTML5</span>
+                        <i class="fa-solid fa-compress panel-opt"></i>
+                    </div>
+                    <textarea id="htmlCode" placeholder="<!-- Tulis HTML di sini -->">&#10084;&#65039; &lt;h1 class="glow-title"&gt;Halo World!&lt;/h1&gt;&#10;&lt;p&gt;Code & Motion Studio Keren.&lt;/p&gt;&#10;&lt;button class="demo-btn"&gt;Klik Saya&lt;/button&gt;</textarea>
+                </div>
+
+                <!-- CSS Panel -->
+                <div class="panel glass-card tilt-card" data-tilt data-tilt-max="3" data-tilt-glare data-tilt-max-glare="0.1">
+                    <div class="panel-header">
+                        <span><i class="fa-brands fa-css3-alt color-css"></i> CSS3</span>
+                        <i class="fa-solid fa-compress panel-opt"></i>
+                    </div>
+                    <textarea id="cssCode" placeholder="/* Tulis CSS di sini */">body {
+  background: #090d16;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.glow-title {
+  color: #00d2ff;
+  text-shadow: 0 0 15px #00d2ff;
+}
+.demo-btn {
+  background: #0072ff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #0072ff;
+}</textarea>
+                </div>
+
+                <!-- JS Panel -->
+                <div class="panel glass-card tilt-card" data-tilt data-tilt-max="3" data-tilt-glare data-tilt-max-glare="0.1">
+                    <div class="panel-header">
+                        <span><i class="fa-brands fa-js color-js"></i> JavaScript</span>
+                        <i class="fa-solid fa-compress panel-opt"></i>
+                    </div>
+                    <textarea id="jsCode" placeholder="// Tulis JS di sini">document.querySelector('.demo-btn').addEventListener('click', () => {
+  alert('Kode JavaScript Berjalan!');
+});</textarea>
+                </div>
+            </div>
+
+            <!-- Live Output Preview -->
+            <div class="preview-panel glass-card">
+                <div class="panel-header">
+                    <span><i class="fa-solid fa-desktop"></i> Live Output</span>
+                    <button class="btn-small ripple-btn" id="refreshPreview"><i class="fa-solid fa-rotate-right"></i> Reload</button>
+                </div>
+                <iframe id="livePreview" title="Preview Frame"></iframe>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ALIGHT MOTION / CAPCUT LIKE EDITOR -->
+        <section id="motion-editor" class="editor-section">
+            <div class="motion-workspace">
+                
+                <!-- Left Tools Panel -->
+                <aside class="motion-tools glass-card">
+                    <button class="tool-btn active ripple-btn" title="Media Import"><i class="fa-solid fa-photo-film"></i></button>
+                    <button class="tool-btn ripple-btn" title="Text Element"><i class="fa-solid fa-font"></i></button>
+                    <button class="tool-btn ripple-btn" title="Keyframe Effects"><i class="fa-solid fa-key"></i></button>
+                    <button class="tool-btn ripple-btn" title="Vector / Shapes"><i class="fa-solid fa-shapes"></i></button>
+                    <button class="tool-btn ripple-btn" title="Audio Tracks"><i class="fa-solid fa-music"></i></button>
+                    <button class="tool-btn ripple-btn" title="Transitions"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                </aside>
+
+                <!-- Center Preview Viewport -->
+                <div class="viewport-container glass-card tilt-card" data-tilt data-tilt-max="2">
+                    <div class="viewport-header">
+                        <span>1920x1080 | 60 FPS</span>
+                        <span class="status-tag">Alight Engine Active</span>
+                    </div>
+                    <div class="viewport-screen" id="viewportScreen">
+                        <!-- Sample Lottie Animation Element inside Video Frame -->
+                        <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_myej3p8g.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+                        <div class="motion-element-overlay" id="motionText">Keyframe Motion Text</div>
+                    </div>
+                    <div class="viewport-controls">
+                        <button class="btn-icon ripple-btn"><i class="fa-solid fa-backward-step"></i></button>
+                        <button class="btn-icon play-btn ripple-btn" id="playMotionBtn"><i class="fa-solid fa-play"></i></button>
+                        <button class="btn-icon ripple-btn"><i class="fa-solid fa-forward-step"></i></button>
+                    </div>
+                </div>
+
+                <!-- Right Inspector Panel -->
+                <aside class="motion-inspector glass-card">
+                    <h3><i class="fa-solid fa-sliders"></i> Layer Inspector</h3>
+                    
+                    <div class="inspector-group">
+                        <label>Transform & Keyframes</label>
+                        <div class="input-row">
+                            <span>Pos X</span> <input type="number" value="0">
+                            <span>Pos Y</span> <input type="number" value="0">
+                        </div>
+                        <div class="input-row">
+                            <span>Scale</span> <input type="range" min="10" max="200" value="100">
+                        </div>
+                        <div class="input-row">
+                            <span>Rotation</span> <input type="range" min="0" max="360" value="0">
+                        </div>
+                    </div>
+
+                    <div class="inspector-group">
+                        <label>Effects & Blending</label>
+                        <select class="custom-select">
+                            <option>Gaussian Blur</option>
+                            <option>Chroma Key (Green Screen)</option>
+                            <option>Glow & Neon Light</option>
+                            <option>Color Grading (LUT)</option>
+                        </select>
+                    </div>
+
+                    <div class="inspector-group">
+                        <label>Applied Custom Font</label>
+                        <div class="font-status-box" id="activeFontName">Default: Poppins</div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Bottom Timeline Panel (CapCut Style) -->
+            <div class="timeline-container glass-card">
+                <div class="timeline-toolbar">
+                    <button class="btn-small"><i class="fa-solid fa-scissors"></i> Split</button>
+                    <button class="btn-small"><i class="fa-solid fa-trash"></i> Delete</button>
+                    <button class="btn-small"><i class="fa-solid fa-plus"></i> Add Keyframe</button>
+                    <div class="time-display">00:00:02:14 / 00:00:30:00</div>
+                </div>
+                <div class="timeline-tracks">
+                    <div class="timeline-cursor"></div>
+                    <div class="track track-video">
+                        <div class="track-label"><i class="fa-solid fa-video"></i> Video Track 1</div>
+                        <div class="clip clip-video" style="width: 40%; left: 5%;">Sample Footage.mp4</div>
+                    </div>
+                    <div class="track track-text">
+                        <div class="track-label"><i class="fa-solid fa-font"></i> Text Track</div>
+                        <div class="clip clip-text" style="width: 25%; left: 10%;">Text Effect Layer</div>
+                    </div>
+                    <div class="track track-audio">
+                        <div class="track-label"><i class="fa-solid fa-music"></i> Audio Track</div>
+                        <div class="clip clip-audio" style="width: 60%; left: 0%;">Background_Music.mp3</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Audio Element for UI Sound Click -->
+    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>

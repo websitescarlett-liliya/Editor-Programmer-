@@ -1,0 +1,561 @@
+/* ==========================================================================
+   GLOBAL VARIABLES & BASE STYLES
+   ========================================================================== */
+:root {
+    --bg-main: #050811;
+    --bg-card: rgba(12, 19, 36, 0.65);
+    --primary-blue: #0072ff;
+    --neon-blue: #00d2ff;
+    --blue-glow: rgba(0, 210, 255, 0.35);
+    --text-color: #f0f6fc;
+    --text-dim: #8b949e;
+    --border-color: rgba(0, 210, 255, 0.2);
+    --glass-blur: blur(16px);
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --transition-fast: 0.25s ease;
+}
+
+/* Light Theme Variables */
+.light-theme {
+    --bg-main: #eef4fc;
+    --bg-card: rgba(255, 255, 255, 0.7);
+    --primary-blue: #0052cc;
+    --neon-blue: #0072ff;
+    --blue-glow: rgba(0, 114, 255, 0.2);
+    --text-color: #1e293b;
+    --text-dim: #64748b;
+    --border-color: rgba(0, 114, 255, 0.2);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+    user-select: none;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Glassmorphism Classes */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Page Transition Overlay */
+.page-transition {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--neon-blue);
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.page-transition.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ==========================================================================
+   FLOATING NAVBAR
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1280px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 1000;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--blue-glow);
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    border-radius: 30px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition-fast);
+}
+
+.tab-btn.active, .tab-btn:hover {
+    color: #fff;
+    background: var(--primary-blue);
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-icon {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-icon:hover {
+    background: var(--neon-blue);
+    color: #fff;
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* Button Morph Effect */
+.btn-morph {
+    background: linear-gradient(135deg, var(--primary-blue), var(--neon-blue));
+    border: none;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--blue-glow);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-morph:hover {
+    border-radius: 8px;
+    transform: scale(1.05);
+}
+
+/* Magnetic Button Base Style */
+.magnetic-btn {
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Ripple Effect Styles */
+.ripple-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   MAIN CONTENT & LAYOUTS
+   ========================================================================== */
+.main-container {
+    margin-top: 100px;
+    padding: 20px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.editor-section {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.editor-section.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Code Editor Panels (CodePen-like) */
+#code-editor {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#code-editor.active {
+    display: flex;
+}
+
+.code-panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    height: 280px;
+    overflow: hidden;
+}
+
+.panel-header {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.color-html { color: #e34c26; }
+.color-css { color: #264de4; }
+.color-js { color: #f7df1e; }
+
+textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 15px;
+    color: #a9b7c6;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    resize: none;
+    outline: none;
+}
+
+/* Live Output Preview Frame */
+.preview-panel {
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #ffffff;
+}
+
+/* Motion Studio Layout (CapCut / Alight Motion) */
+.motion-workspace {
+    display: grid;
+    grid-template-columns: 70px 1fr 300px;
+    gap: 15px;
+    height: 480px;
+    margin-bottom: 15px;
+}
+
+.motion-tools {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    gap: 15px;
+}
+
+.tool-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    transition: var(--transition-fast);
+}
+
+.tool-btn.active, .tool-btn:hover {
+    background: var(--primary-blue);
+    color: white;
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.viewport-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    background: #000;
+}
+
+.viewport-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.status-tag {
+    color: var(--neon-blue);
+    border: 1px solid var(--neon-blue);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.viewport-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px dashed rgba(255,255,255,0.1);
+    margin: 10px 0;
+}
+
+.motion-element-overlay {
+    position: absolute;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-shadow: 0 0 10px var(--neon-blue);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from { transform: scale(1); filter: drop-shadow(0 0 2px var(--neon-blue)); }
+    to { transform: scale(1.1); filter: drop-shadow(0 0 15px var(--neon-blue)); }
+}
+
+.viewport-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.motion-inspector {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.inspector-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inspector-group label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.input-row input[type="number"], .custom-select {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+    color: white;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.font-status-box {
+    background: rgba(0, 210, 255, 0.1);
+    border: 1px dashed var(--neon-blue);
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Timeline Panel */
+.timeline-container {
+    height: 200px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.btn-small {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.time-display {
+    margin-left: auto;
+    font-family: monospace;
+    color: var(--neon-blue);
+}
+
+.timeline-tracks {
+    position: relative;
+    flex: 1;
+    background: rgba(0,0,0,0.4);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.timeline-cursor {
+    position: absolute;
+    top: 0; bottom: 0; left: 30%;
+    width: 2px;
+    background: #ff0055;
+    box-shadow: 0 0 8px #ff0055;
+    z-index: 10;
+}
+
+.track {
+    height: 32px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.track-label {
+    position: absolute;
+    left: 10px;
+    font-size: 0.75rem;
+    z-index: 2;
+    color: #fff;
+}
+
+.clip {
+    position: absolute;
+    height: 80%;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    color: white;
+}
+
+.clip-video { background: linear-gradient(90deg, #0072ff, #00d2ff); }
+.clip-text { background: linear-gradient(90deg, #ff007f, #7928ca); }
+.clip-audio { background: linear-gradient(90deg, #00f2fe, #4facfe); }
+
+/* ==========================================================================
+   COMMAND PALETTE MODAL
+   ========================================================================== */
+.command-palette-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 100px;
+}
+
+.command-palette-overlay.active {
+    display: flex;
+}
+
+.command-palette {
+    width: 90%;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+.palette-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    gap: 10px;
+}
+
+.palette-header input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 1rem;
+}
+
+.palette-results {
+    list-style: none;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.palette-results li {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition-fast);
+}
+
+.palette-results li:hover {
+    background: var(--primary-blue);
+    color: white;
+}
